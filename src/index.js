@@ -51,7 +51,7 @@ function App() {
   return (
     <div className="container">
       <Header />
-      <Body />
+      <Menu />
       <Footer />
     </div>
   );
@@ -77,53 +77,63 @@ function Menu() {
 
       {numPizzas > 0 ? (
         <ul className="pizzas">
-          {pizzaData.map((pizza) => {
-            <Pizza pizzaObj={pizza} key={pizza.name} />;
-          })};
+          {pizzaData.map(pizza => {
+            <Pizza pizzaObj={pizza} key={pizza.name} />
+          })}
         </ul>
-      ) : 
-      (<p>
-        We're still working on our menu. Please come back later!
-      </p>)}
+      ) : (
+        <p>We're still working on our menu. Please come back later!</p>
+      )}
     </main>
   );
 }
 
 // A REACT Component
-function Pizza(props) {
+function Pizza({pizzaObj}) { 
+  // Destructuring props
   return (
     <li className="pizza">
-      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
-        <h3>{props.pizzaObj.name}</h3>
-        <p>{props.pizzaObj.ingredients}</p>
-        <span>{props.pizzaObj.price}</span>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>{pizzaObj.price}</span>
       </div>
     </li>
   );
 }
 
-function Footer() {
+function Footer(props) {
+  console.log(props);
   const hours = new Date().getHours();
-  const openingHours = 12;
-  const closingHours = 22;
-  const isOpen = hours >= openingHours && hours <= closingHours;
+  const openHour = 12;
+  const closeHour = 22;
+  const isOpen = hours >= openHour && hours <= closeHour;
 
+  // For most of the time return JSX using ternary operator for conditional rendering
   return (
     <footer className="footer">
-      $
       {isOpen ? (
-        <div>
-          <p>
-            We're open till ${closingHours}:00. Come visit us or order online.
-          </p>
-          <button className="btn">Order</button>
-        </div>
+        <Order closeHour={closeHour} openHour={openHour}/>
       ) : (
-        <p>We're happy to welcome you between {openingHours}:00 and {closeHours}:00</p>
+        <p>
+          We're happy to welcome you between {openHour}:00 and {closeHour}:00
+        </p>
       )}
     </footer>
   );
+}
+
+function Order({closeHour, openHour}) {
+  // Destructuring props
+  return (
+    <div className="order">
+      <p>
+        We're open from ${openHour} to ${closeHour}:00. Come visit us or order online.
+      </p>
+      <button className="btn">Order</button>
+    </div>
+  )
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
